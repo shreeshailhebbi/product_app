@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 22),
+                                                  fontSize: 20),
                                             ),
                                             SizedBox(
                                               height: 5,
