@@ -180,9 +180,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
               : ShimmerScreen(
                   height: 200,
-                  width: width / 2 - 20,
+                  width: width -20,
                   vertical: true,
-                  listView: false,
+                  listView: true,
                 ),
         ),
       ),
