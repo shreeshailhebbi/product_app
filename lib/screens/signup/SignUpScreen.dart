@@ -14,9 +14,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool _emailError = false;
   bool _passwordError = false;
   bool _isLoading = false;
+  bool _confirmPasswordError = false;
+  String confirmErrorText = "Confirm Password can\'t be empty";
 
   signUp() async {
     FocusScope.of(context).unfocus();
@@ -31,28 +35,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
       setState(() {
         _passwordError = true;
       });
-    } else {
+    }
+    if (_confirmPasswordController.text.isEmpty) {
       setState(() {
-        _isLoading = true;
+        _confirmPasswordError = true;
       });
-      try {
-        UserCredential user = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: email, password: password);
-
-        print(user.user.emailVerified.toString());
-        getToastBar("Email and Password Registered Successfully..!");
-
-        if (user.user != null) {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => LoginScreen()));
-        }
-      } catch (e) {
+    } else {
+      if (_confirmPasswordController.text == _passwordController.text) {
         setState(() {
-          _isLoading = false;
+          _isLoading = true;
         });
-        getToastBar("Enter valid Email and Password");
-        print(e.message);
+        try {
+          UserCredential user = await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(email: email, password: password);
+
+          print(user.user.emailVerified.toString());
+          getToastBar("Email and Password Registered Successfully..!");
+
+          if (user.user != null) {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => LoginScreen()));
+          }
+        } catch (e) {
+          setState(() {
+            _isLoading = false;
+          });
+          getToastBar("Enter valid Email and Password");
+          print(e.message);
+        }
       }
+      setState(() {
+        _confirmPasswordError = true;
+        confirmErrorText = "Password and Confirm Password Does'nt Match!";
+      });
     }
   }
 
@@ -90,7 +105,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Column(
                   children: <Widget>[
                     SizedBox(
-                      height: 40,
+                      height: 30,
                     ),
                     Padding(
                       padding: MediaQuery.of(context).padding,
@@ -113,7 +128,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 40,
+                      height: 30,
                     ),
                     Expanded(
                       child: Container(
@@ -123,12 +138,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 topLeft: Radius.circular(60),
                                 topRight: Radius.circular(60))),
                         child: Padding(
-                          padding: EdgeInsets.all(40),
+                          padding:
+                              EdgeInsets.only(top: 30, right: 30, left: 30),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: <Widget>[
                               Padding(
-                                padding: const EdgeInsets.only(top: 30.0),
+                                padding: const EdgeInsets.only(top: 20.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
@@ -180,7 +196,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             ),
                                           )
                                         : Container(),
-                                    SizedBox(height: 20),
+                                    SizedBox(height: 15),
                                     Container(
                                       padding: EdgeInsets.all(8),
                                       decoration: BoxDecoration(
@@ -220,14 +236,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             ),
                                           )
                                         : Container(),
+                                    SizedBox(height: 15),
+                                    Container(
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Color.fromRGBO(
+                                                    255, 95, 27, 0.3),
+                                                blurRadius: 20,
+                                                offset: Offset(0, 10))
+                                          ]),
+                                      child: TextFormField(
+                                        style: TextStyle(fontSize: 18),
+                                        onChanged: (text) {
+                                          setState(() {
+                                            text.isEmpty
+                                                ? _confirmPasswordError = true
+                                                : _confirmPasswordError = false;
+                                          });
+                                        },
+                                        controller: _confirmPasswordController,
+                                        keyboardType: TextInputType.text,
+                                        decoration: buildInputDecoration(
+                                            Icons.lock, "Confirm Password"),
+                                      ),
+                                    ),
+                                    _confirmPasswordError
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Text(
+                                              confirmErrorText,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.red),
+                                            ),
+                                          )
+                                        : Container(),
                                   ],
                                 ),
                               ),
                               SizedBox(
-                                height: 10,
-                              ),
-                              SizedBox(
-                                height: 50,
+                                height: 30,
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -252,7 +305,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                               ),
                               SizedBox(
-                                height: 25,
+                                height: 20,
                               ),
                               GestureDetector(
                                 onTap: () {

@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:product_app/model/Product.dart';
 import 'package:product_app/screens/login/LoginScreen.dart';
 import 'package:product_app/screens/product/AddProductScreen.dart';
 import 'package:product_app/utilities/Shimmer.dart';

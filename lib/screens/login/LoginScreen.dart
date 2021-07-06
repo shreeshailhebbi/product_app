@@ -15,6 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   bool _emailError = false;
   bool _passwordError = false;
   bool _isLoading = false;
@@ -38,13 +39,11 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       try {
         UserCredential user = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-                email: email,
-                password: password);
+            .signInWithEmailAndPassword(email: email, password: password);
 
         print(user.user.emailVerified.toString());
 
-        if (user.user!=null) {
+        if (user.user != null) {
           getToastBar("Successfully Logged In!");
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => HomeScreen()));
@@ -126,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 topLeft: Radius.circular(60),
                                 topRight: Radius.circular(60))),
                         child: Padding(
-                          padding: EdgeInsets.all(40),
+                          padding: EdgeInsets.all(30),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: <Widget>[
@@ -158,7 +157,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           });
                                         },
                                         controller: _emailController,
-                                        keyboardType: TextInputType.emailAddress,
+                                        keyboardType:
+                                            TextInputType.emailAddress,
                                         decoration: buildInputDecoration(
                                           Icons.email,
                                           "Email",
@@ -182,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ),
                                           )
                                         : Container(),
-                                    SizedBox(height: 20),
+                                    SizedBox(height: 15),
                                     Container(
                                       padding: EdgeInsets.all(8),
                                       decoration: BoxDecoration(
@@ -237,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                               SizedBox(
-                                height: 50,
+                                height: 40,
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -262,11 +262,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                               SizedBox(
-                                height: 25,
+                                height: 20,
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUpScreen()));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SignUpScreen()));
                                 },
                                 child: Container(
                                   height: 50,
