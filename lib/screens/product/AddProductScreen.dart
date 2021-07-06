@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:product_app/Loader/Loader.dart';
 import 'package:product_app/utilities/constants.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -86,6 +87,9 @@ class _AddProductWidgetState extends State<AddProductScreen> {
   }
 
   handleAdd() async {
+    setState(() {
+      _isLoading = true;
+    });
     if (_image == null) {
       getToastBar("Select Product Image!");
     } else {
@@ -115,6 +119,9 @@ class _AddProductWidgetState extends State<AddProductScreen> {
           }).then((value) =>
               {getToastBar("Product Added!"), Navigator.of(context).pop()});
         } else {
+          setState(() {
+            _isLoading = false;
+          });
           throw ('This file is not an image');
         }
       }
@@ -171,114 +178,123 @@ class _AddProductWidgetState extends State<AddProductScreen> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            child: SafeArea(
-              child: Container(
-                color: Colors.transparent,
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            _showPicker(context);
-                          },
-                          child: Container(
-                            height: 150,
-                            width: 130,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.cover, image: getImage())),
+            child: LayoutBuilder(builder:
+                (BuildContext context, BoxConstraints viewPortConstraints) {
+              return SafeArea(
+                child: Container(
+                  color: Colors.transparent,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              _showPicker(context);
+                            },
+                            child: Container(
+                              height: 150,
+                              width: 130,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover, image: getImage())),
+                            ),
                           ),
-                        ),
-                        _image != null
-                            ? Column(
-                                children: [
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    "Original Image Size - ${originalSize.toStringAsFixed(2)} kb",
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Text(
-                                      "New Image Size - ${newSize.toStringAsFixed(2)} kb")
-                                ],
-                              )
-                            : Container(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          validator: (text) {
-                            if (text == null || text.isEmpty) {
-                              return 'Please Enter Product Name';
-                            }
-                            return null;
-                          },
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.deny('  ')
-                          ],
-                          controller: _productNameController,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.shopping_bag_outlined),
-                            hintText: 'Product Name*',
+                          _image != null
+                              ? Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      "Original Image Size - ${originalSize.toStringAsFixed(2)} kb",
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text(
+                                        "New Image Size - ${newSize.toStringAsFixed(2)} kb")
+                                  ],
+                                )
+                              : Container(),
+                          SizedBox(
+                            height: 20,
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          validator: (text) {
-                            if (text == null || text.isEmpty) {
-                              return 'Please Enter Product Price';
-                            }
-                            return null;
-                          },
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(
-                                new RegExp(r"^\d+\.?\d{0,2}"))
-                          ],
-                          keyboardType:
-                              TextInputType.numberWithOptions(decimal: true),
-                          controller: _productPriceController,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.money),
-                            hintText: 'Product Price*',
+                          TextFormField(
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return 'Please Enter Product Name';
+                              }
+                              return null;
+                            },
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.deny('  ')
+                            ],
+                            controller: _productNameController,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.shopping_bag_outlined),
+                              hintText: 'Product Name*',
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          validator: (text) {
-                            if (text == null || text.isEmpty) {
-                              return 'Please Enter Description';
-                            }
-                            return null;
-                          },
-                          maxLines: null,
-                          keyboardType: TextInputType.multiline,
-                          controller: _descriptionController,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.description),
-                            hintText: 'Description*',
+                          SizedBox(
+                            height: 10,
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
+                          TextFormField(
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return 'Please Enter Product Price';
+                              }
+                              return null;
+                            },
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  new RegExp(r"^\d+\.?\d{0,2}"))
+                            ],
+                            keyboardType:
+                                TextInputType.numberWithOptions(decimal: true),
+                            controller: _productPriceController,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.money),
+                              hintText: 'Product Price*',
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return 'Please Enter Description';
+                              }
+                              return null;
+                            },
+                            maxLines: null,
+                            keyboardType: TextInputType.multiline,
+                            controller: _descriptionController,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.description),
+                              hintText: 'Description*',
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
+              );
+            }),
           ),
-          Container(child: _isLoading ? Container() : Container())
+          Container(
+              child: _isLoading
+                  ? Loader(
+                      isCustom: true,
+                      loadingTxt: 'Adding Product...',
+                      opacity: 0.7)
+                  : Container())
         ],
       ),
       bottomNavigationBar: Container(
