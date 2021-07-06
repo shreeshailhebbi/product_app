@@ -106,8 +106,6 @@ class _AddProductWidgetState extends State<AddProductScreen> {
 
         if (snapshot.state == TaskState.success) {
           final String downloadUrl = await snapshot.ref.getDownloadURL();
-          print("downloadUrl");
-          print(downloadUrl);
           await FirebaseFirestore.instance.collection("product").add({
             "image": downloadUrl,
             "id": id,
@@ -117,7 +115,6 @@ class _AddProductWidgetState extends State<AddProductScreen> {
           }).then((value) =>
               {getToastBar("Product Added!"), Navigator.of(context).pop()});
         } else {
-          print('Error from image repo ${snapshot.state.toString()}');
           throw ('This file is not an image');
         }
       }

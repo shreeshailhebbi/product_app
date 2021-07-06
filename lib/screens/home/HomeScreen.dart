@@ -29,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection('product');
     collectionReference.snapshots().listen((snapshot) {
-      print(snapshot.docs.length);
       setState(() {
         _isLoading = false;
         _products = snapshot.docs;
@@ -181,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
               : ShimmerScreen(
                   height: 200,
                   width: width -20,
-                  vertical: true,
+                  vertical: false,
                   listView: true,
                 ),
         ),

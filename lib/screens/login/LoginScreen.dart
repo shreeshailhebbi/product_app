@@ -41,8 +41,6 @@ class _LoginScreenState extends State<LoginScreen> {
         UserCredential user = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
 
-        print(user.user.emailVerified.toString());
-
         if (user.user != null) {
           getToastBar("Successfully Logged In!");
           Navigator.pushReplacement(

@@ -49,7 +49,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           UserCredential user = await FirebaseAuth.instance
               .createUserWithEmailAndPassword(email: email, password: password);
 
-          print(user.user.emailVerified.toString());
           getToastBar("Email and Password Registered Successfully..!");
 
           if (user.user != null) {
