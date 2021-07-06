@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "9974366152",
+    "project_id": "productapp-1878d",
+    "storage_bucket": "productapp-1878d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:9974366152:android:77e98c32e89fcc2d1f0afd",
+        "android_client_info": {
+          "package_name": "com.a2easy4.product_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "9974366152-uqarub0as440u4j7u0ojpu5kcrqeb518.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0zKbfN3f0BZC4IOQrb-7bxjEy6gEoX8c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "9974366152-uqarub0as440u4j7u0ojpu5kcrqeb518.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
