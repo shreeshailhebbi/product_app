@@ -87,16 +87,16 @@ class _AddProductWidgetState extends State<AddProductScreen> {
   }
 
   handleAdd() async {
-    setState(() {
-      _isLoading = true;
-    });
+    FocusScope.of(context).unfocus();
     if (_image == null) {
       getToastBar("Select Product Image!");
     } else {
       Random random = new Random();
       int id = random.nextInt(9999);
-      FocusScope.of(context).unfocus();
       if (_formKey.currentState.validate()) {
+        setState(() {
+          _isLoading = true;
+        });
         String imageName = _image.path
             .substring(
                 _image.path.lastIndexOf("/"), _image.path.lastIndexOf("."))
